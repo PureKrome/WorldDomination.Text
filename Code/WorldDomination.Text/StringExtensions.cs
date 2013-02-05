@@ -14,7 +14,7 @@ namespace WorldDomination.Text
             }
 
             // Replace invalid characters with empty strings. 
-            var pattern = string.IsNullOrEmpty(regexPattern) ? @"[^\w\.@-]" : regexPattern;
+            var pattern = string.IsNullOrEmpty(regexPattern) ? @"[^\w\ .@-]" : regexPattern;
 
             return Regex.Replace(content, pattern, string.Empty, RegexOptions.None);
         }

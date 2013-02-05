@@ -56,7 +56,7 @@ namespace WorldDomination.Text.Tests
             {
                 // Arrange.
                 const string content =
-                    "This is a bad review. I noticed that there were a lot of white people living in Ivanhoe. This doesn't mean this is a racist suburb, though.";
+                    "This is a bad review. &^*(sd79ad hskah sad (*&(&97s a9 I noticed adult living that there were a lot of white people living in Ivanhoe. This doesn't mean this is a racist suburb, though.";
 
                 var stringContent = new StringContent();
 
@@ -66,7 +66,7 @@ namespace WorldDomination.Text.Tests
                 // Assert.
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
-                Assert.Equal(2, results.Count);
+                Assert.Equal(3, results.Count);
             }
 
             [Fact]
