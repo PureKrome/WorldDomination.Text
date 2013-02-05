@@ -52,6 +52,24 @@ namespace WorldDomination.Text.Tests
             }
 
             [Fact]
+            public void GivenSomeContentWithBadPhrasesSuppliedSeparately_PhrasesThatExist_ReturnsAListOfBadPhrasesFound()
+            {
+                // Arrange.
+                const string content =
+                    "This is a bad review. I noticed that there were a lot of white people living in Ivanhoe. This doesn't mean this is a racist suburb, though.";
+
+                var stringContent = new StringContent();
+
+                // Act.
+                var results = stringContent.PhrasesThatExist(content, PhraseList);
+
+                // Assert.
+                Assert.NotNull(results);
+                Assert.NotEmpty(results);
+                Assert.Equal(2, results.Count);
+            }
+
+            [Fact]
             public void GivenSomeContentWithNoBadPhrases_PhrasesThatExist_ReturnsANullList()
             {
                 // Arrange.
@@ -62,6 +80,22 @@ namespace WorldDomination.Text.Tests
 
                 // Act.
                 var results = stringContent.PhrasesThatExist(content);
+
+                // Assert.
+                Assert.Null(results);
+            }
+
+            [Fact]
+            public void GivenSomeContentWithNoBadWordsAndBadPhrasesSuppliedSeparately_PhrasesThatExist_ReturnsAListOfBadPhrasesFound()
+            {
+                // Arrange.
+                const string content =
+                    "sdhfasjdfh sadfo8as 68sa6t &%7tsTSOtafdsf dsakf haspdf y78 6* ";
+
+                var stringContent = new StringContent();
+
+                // Act.
+                var results = stringContent.PhrasesThatExist(content, PhraseList);
 
                 // Assert.
                 Assert.Null(results);
