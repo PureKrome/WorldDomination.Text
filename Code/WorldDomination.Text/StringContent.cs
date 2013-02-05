@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WorldDomination.Text
 {
-    public class StringContent
+    public class StringContent : IStringContent
     {
         public StringContent() : this(null)
         {
