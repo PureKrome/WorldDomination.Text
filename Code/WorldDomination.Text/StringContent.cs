@@ -18,7 +18,7 @@ namespace WorldDomination.Text
 
         public IList<string> PhraseList { get; private set; }
 
-        public List<string> PhrasesThatExist(string content, IList<string> phraseList = null)
+        public IList<FoundPhrase> PhrasesThatExist(string content, IList<string> phraseList = null)
         {
             if (string.IsNullOrEmpty(content))
             {
@@ -37,13 +37,17 @@ namespace WorldDomination.Text
             // Remove all silly characters that could mess shit up.
             var cleanedContent = content.Clean();
 
+            var results = new List<FoundPhrase>();
+
             // Find any bad words that exist in this cleaned content.
-            var results = new List<string>();
-            foreach (var phrase in (phraseList ?? PhraseList)
-                .Where(phrase => cleanedContent.IndexOf(phrase, StringComparison.InvariantCultureIgnoreCase) >= 0)
-                .Where(phrase => !results.Contains(phrase)))
+            foreach (var phrase in (phraseList != null ? phraseList.AsParallel() : PhraseList.AsParallel()))
             {
-                results.Add(phrase);
+                int index = 0;
+                while ((index = (cleanedContent.IndexOf(phrase, index, StringComparison.InvariantCultureIgnoreCase))) >= 0)
+                {
+                    results.Add(new FoundPhrase(phrase, index));
+                    index = index + phrase.Length;
+                }
             }
 
             return results.Count <= 0 ? null : results;

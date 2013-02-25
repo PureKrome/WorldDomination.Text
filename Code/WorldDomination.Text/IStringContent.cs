@@ -4,6 +4,6 @@ namespace WorldDomination.Text
 {
     public interface IStringContent
     {
-        List<string> PhrasesThatExist(string content, IList<string> phraseList = null);
+        IList<FoundPhrase> PhrasesThatExist(string content, IList<string> phraseList = null);
     }
 }

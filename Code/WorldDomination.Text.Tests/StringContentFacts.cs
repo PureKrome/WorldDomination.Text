@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Xunit;
 
@@ -28,7 +29,8 @@ namespace WorldDomination.Text.Tests
                                "american indians",
                                "asian",
                                "racist",
-                               "white"
+                               "white",
+                               "ass"
                            };
                 }
             }
@@ -67,6 +69,8 @@ namespace WorldDomination.Text.Tests
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
                 Assert.Equal(3, results.Count);
+                Assert.Equal("adult living", results.First().Phrase);
+                Assert.Equal(56, results.First().IndexOn);
             }
 
             [Fact]
@@ -111,6 +115,45 @@ namespace WorldDomination.Text.Tests
                 var result = Assert.Throws<InvalidOperationException>(() => stringContent.PhrasesThatExist("foo"));
                 Assert.Equal("Both the PhraseList (class property) and the phraseList (argument) are null or empty. We need at least -some- phrase list, before we can find all phrases within the content. Please provide either/or.", result.Message);
             }
+
+            [Fact]
+            public void GivenSomeContentThatContainsTheTinyWordAs_PhrasesThatExist_ReturnsOneFoundPhrase()
+            {
+                // Arrange.
+                const string content = "How quickly can I get a passport as I need to travel overseas in the next 2 wks for business?";
+                var stringContent = new StringContent(PhraseList);
+
+                // Act.
+                var results = stringContent.PhrasesThatExist(content);
+
+                // Assert.
+                Assert.NotNull(results);
+                Assert.Equal(1, results.Count);
+                Assert.Equal("ass", results.First().Phrase);
+                Assert.Equal(25, results.First().IndexOn);
+            }
+
+            [Fact]
+            public void GivenSomeContentThatContainsTheMultipleSamePhrases_PhrasesThatExist_ReturnsSomeFoundPhrases()
+            {
+                // Arrange.
+                const string content = "How quickly can I get a passport as I need white to travel overseas crapasshat in the next 2 wks for business?";
+                var stringContent = new StringContent(PhraseList);
+
+                // Act.
+                var results = stringContent.PhrasesThatExist(content).OrderBy(x => x.IndexOn).ToList();
+
+                // Assert.
+                Assert.NotNull(results);
+                Assert.Equal(3, results.Count);
+                Assert.Equal("ass", results.First().Phrase);
+                Assert.Equal(25, results.First().IndexOn);
+                Assert.Equal("white", results[1].Phrase);
+                Assert.Equal(43, results[1].IndexOn);
+                Assert.Equal("ass", results[2].Phrase);
+                Assert.Equal(72, results[2].IndexOn);
+            }
+
         }
     }
 
