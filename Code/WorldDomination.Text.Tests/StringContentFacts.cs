@@ -30,7 +30,8 @@ namespace WorldDomination.Text.Tests
                                "asian",
                                "racist",
                                "white",
-                               "ass"
+                               "ass",
+                               "fuck"
                            };
                 }
             }
@@ -117,9 +118,10 @@ namespace WorldDomination.Text.Tests
             }
 
             [Fact]
-            public void GivenSomeContentThatContainsTheTinyWordAs_PhrasesThatExist_ReturnsOneFoundPhrase()
+            public void GivenSomeContentThatContainsAPhraseInsideAWord_PhrasesThatExist_ReturnsNull()
             {
                 // Arrange.
+                // NOTE: phrase 'ass' exists but it's inside a word.
                 const string content = "How quickly can I get a passport as I need to travel overseas in the next 2 wks for business?";
                 var stringContent = new StringContent(PhraseList);
 
@@ -127,17 +129,14 @@ namespace WorldDomination.Text.Tests
                 var results = stringContent.PhrasesThatExist(content);
 
                 // Assert.
-                Assert.NotNull(results);
-                Assert.Equal(1, results.Count);
-                Assert.Equal("ass", results.First().Phrase);
-                Assert.Equal(25, results.First().IndexOn);
+                Assert.Null(results);
             }
 
             [Fact]
             public void GivenSomeContentThatContainsTheMultipleSamePhrases_PhrasesThatExist_ReturnsSomeFoundPhrases()
             {
                 // Arrange.
-                const string content = "How quickly can I get a passport as I need white to travel overseas crapasshat in the next 2 wks for business?";
+                const string content = "How quickly can I get a passport as I need white to travel overseas ass crapasshat in the next fuck 2 wks for business?";
                 var stringContent = new StringContent(PhraseList);
 
                 // Act.
@@ -146,14 +145,13 @@ namespace WorldDomination.Text.Tests
                 // Assert.
                 Assert.NotNull(results);
                 Assert.Equal(3, results.Count);
-                Assert.Equal("ass", results.First().Phrase);
-                Assert.Equal(25, results.First().IndexOn);
-                Assert.Equal("white", results[1].Phrase);
-                Assert.Equal(43, results[1].IndexOn);
-                Assert.Equal("ass", results[2].Phrase);
-                Assert.Equal(72, results[2].IndexOn);
+                Assert.Equal("white", results.First().Phrase);
+                Assert.Equal(43, results.First().IndexOn);
+                Assert.Equal("ass", results[1].Phrase);
+                Assert.Equal(68, results[1].IndexOn);
+                Assert.Equal("fuck", results[2].Phrase);
+                Assert.Equal(95, results[2].IndexOn);
             }
-
         }
     }
 

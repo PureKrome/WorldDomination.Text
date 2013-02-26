@@ -45,7 +45,24 @@ namespace WorldDomination.Text
                 int index = 0;
                 while ((index = (cleanedContent.IndexOf(phrase, index, StringComparison.InvariantCultureIgnoreCase))) >= 0)
                 {
-                    results.Add(new FoundPhrase(phrase, index));
+                    // "How quickly can I get a passport as I need white to travel overseas ass crapasshat in the next fuck 2 wks for business?";
+
+                    // We have found an offending phrase .. but it is 'stand alone' ?
+                    // Check the characters to 'either side' of the content where the phrase is found. 
+                    // If it's letter/digit then it's considered NOT FOUND.
+                    var ri = index + phrase.Length + 1 <= cleanedContent.Length;
+                    var right = char.IsLetterOrDigit(cleanedContent[index + phrase.Length]);
+                    var li = index > 0;
+                    var left = char.IsLetterOrDigit(cleanedContent[index - 1]);
+                    if ((index > 0 && !char.IsLetterOrDigit(cleanedContent[index - 1])) &&
+                         (index + phrase.Length <= cleanedContent.Length && !char.IsLetterOrDigit(cleanedContent[index + phrase.Length])))
+                    {
+                        // Phrase is stand alone. so record this, please.
+                        results.Add(new FoundPhrase(phrase, index));
+                    }
+
+                    
+                    
                     index = index + phrase.Length;
                 }
             }
