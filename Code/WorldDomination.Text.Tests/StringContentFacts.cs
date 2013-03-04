@@ -152,6 +152,22 @@ namespace WorldDomination.Text.Tests
                 Assert.Equal("fuck", results[2].Phrase);
                 Assert.Equal(95, results[2].IndexOn);
             }
+
+            [Fact]
+            public void GivenSomeContentAndPhraseThatAreIdenticial_PhrasesThatExist_ReturnsThePhrase()
+            {
+                // Arrange.
+                const string content = "ass";
+                var stringContent = new StringContent(PhraseList);
+
+                // Act.
+                var results = stringContent.PhrasesThatExist(content, new List<string>{content});
+
+                // Assert.
+                Assert.NotNull(results);
+                Assert.Equal(content, results.First().Phrase);
+                Assert.Equal(0, results.First().IndexOn);
+            }
         }
     }
 

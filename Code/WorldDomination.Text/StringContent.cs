@@ -50,18 +50,20 @@ namespace WorldDomination.Text
                     // We have found an offending phrase .. but it is 'stand alone' ?
                     // Check the characters to 'either side' of the content where the phrase is found. 
                     // If it's letter/digit then it's considered NOT FOUND.
-                    var ri = index + phrase.Length + 1 <= cleanedContent.Length;
-                    var right = char.IsLetterOrDigit(cleanedContent[index + phrase.Length]);
-                    var li = index > 0;
-                    var left = char.IsLetterOrDigit(cleanedContent[index - 1]);
-                    if ((index > 0 && !char.IsLetterOrDigit(cleanedContent[index - 1])) &&
-                         (index + phrase.Length <= cleanedContent.Length && !char.IsLetterOrDigit(cleanedContent[index + phrase.Length])))
+                    // NOTE: We're only testing characters to either side of the found word -IF- there is some character before or after.
+                    //       This handles words found at the start and/or end or if the content = the phrase.
+                    var hasCharactersAfterWord = index + phrase.Length <= cleanedContent.Length - 1;
+                    var isNextCharacterALetterOrDigit = hasCharactersAfterWord && char.IsLetterOrDigit(cleanedContent[index + phrase.Length]);
+                    var hasCharacterBeforeWord = index > 0;
+                    var isPreviousCharacterALetterOrDigit = hasCharacterBeforeWord && char.IsLetterOrDigit(cleanedContent[index - 1]);
+                    if ( 
+                        (hasCharacterBeforeWord ? !isPreviousCharacterALetterOrDigit : true) &&
+                        (hasCharactersAfterWord ? !isNextCharacterALetterOrDigit : true)
+                        )
                     {
                         // Phrase is stand alone. so record this, please.
                         results.Add(new FoundPhrase(phrase, index));
                     }
-
-                    
                     
                     index = index + phrase.Length;
                 }
