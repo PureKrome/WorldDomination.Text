@@ -71,7 +71,7 @@ namespace WorldDomination.Text.Tests
                 Assert.NotEmpty(results);
                 Assert.Equal(3, results.Count);
                 Assert.Equal("adult living", results.First().Phrase);
-                Assert.Equal(56, results.First().IndexOn);
+                Assert.Equal(65, results.First().IndexOn);
             }
 
             [Fact]
@@ -167,6 +167,61 @@ namespace WorldDomination.Text.Tests
                 Assert.NotNull(results);
                 Assert.Equal(content, results.First().Phrase);
                 Assert.Equal(0, results.First().IndexOn);
+            }
+
+            [Fact]
+            public void GivenSomeLongContentWithBadPhrases_PhrasesThatExist_ReturnsSomeFoundPhrases()
+            {
+                // Arrange.
+                string content =
+                    string.Format(
+                        "White Hook, a town in Dutchess County’s northwestern corner, consists of two villages, Tivoli and Red Hook, and several white hamlets. Its population is 11,319, spread across 40 square miles. The land was initially occupied by the Esopus and Seposco Indians.{0}Dutch navigators, who arrived from the river, first observed the peninsula-shaped area covered with red foliage and named it “Red Hoek.”{0}Recreation opportunities are plentiful. The Red Hook Recreational Park has a public pool and holds pool parties for children and teens. Several sports programs are available, including girls’ field hockey and lacrosse. Stevenson Gymnasium, located on the campus of Bard College, is open to the public in the summer. It has sports fields and courts, a pool and a fitness center. The Red Hook Golf Club is a semi-private club established in 1931, with 18 holes. The most unique of Red Hook’s recreational facilities, though, is Poets’ Walk Park, a 120 acre property developed in 1949. It was designed to celebrate the connection between nature and literature, and reportedly inspired many 19th century writers.{0}The town has an excellent school system, one of the strongest in the county. Mill Road has a primary division for kindergarten through second grade and an intermediate school for third through fifth graders. At Linden Avenue Middle School, qualified students can take Regents exams in two subjects, allowing them to begin earning credits for their high school diploma. U.S. News and World Report recently ranked Red Hook High School 38th out of 370 in NY, and 221 out of 21,776 nationally. The high school has excellent sports teams, as well as a renowned drama department.{0}There are no big strip malls or shopping centers. However, there are shops and restaurants located throughout the town. The Chocolate Factory is one collection of small businesses; it’s no longer a chocolate factory. It includes an art framer, a florist, a preschool, and a few doctors’ offices.{0}Many residents are part-timers who reside in New York City during the week. Though there is no train service to the town, it is a two-hour trip by car via the Taconic Parkway. Whether the search is for a weekend home or a full-time dwelling, home shoppers will find options across a wide range of prices. White.{0}",
+                        Environment.NewLine);
+                var stringContent = new StringContent(PhraseList);
+
+                // Act.
+                var result = stringContent.PhrasesThatExist(content, PhraseList);
+
+                // Assert.
+                Assert.NotNull(result);
+                Assert.Equal(3, result.Count);
+                Assert.NotNull(result.First());
+                Assert.Equal("white", result.First().Phrase);
+                Assert.Equal(0, result.First().IndexOn);
+                Assert.NotNull(result[1]);
+                Assert.Equal("white", result[1].Phrase);
+                Assert.Equal(120, result[1].IndexOn);
+                Assert.NotNull(result[2]);
+                Assert.Equal("white", result[2].Phrase);
+                Assert.Equal(2285, result[2].IndexOn);
+            }
+
+            [Fact]
+            public void GivenSomeContentWhereTheSuffixIsABadPhrase_PhrasesThatExists_DoesNotReturnAnyPhrases()
+            {
+                // Arrange.
+                const string content = "glass";
+                var stringContent = new StringContent(PhraseList);
+
+                // Act.
+                var result = stringContent.PhrasesThatExist(content);
+
+                // Assert.
+                Assert.Null(result);
+            }
+
+            [Fact]
+            public void GivenSomeContentWhereThePrefixIsABadPhrase_PhrasesThatExists_DoesNotReturnAnyPhrases()
+            {
+                // Arrange.
+                const string content = "assistant";
+                var stringContent = new StringContent(PhraseList);
+
+                // Act.
+                var result = stringContent.PhrasesThatExist(content);
+
+                // Assert.
+                Assert.Null(result);
             }
         }
     }
