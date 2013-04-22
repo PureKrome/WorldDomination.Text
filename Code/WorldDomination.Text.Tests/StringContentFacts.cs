@@ -223,6 +223,28 @@ namespace WorldDomination.Text.Tests
                 // Assert.
                 Assert.Null(result);
             }
+
+            [Fact]
+            public void GivenContentWithBlacklistedWordsWhereWordIsInBlackListTwice_PhrasesThatExist_PhraseOnlyReturnedOnce()
+            {
+                // Arrange.
+                const string content = "This is zebra content with an aardvark ass in it.";
+                
+                IList<string> fakeBlacklist = new List<string>();
+                fakeBlacklist.Add("aardvark");
+                fakeBlacklist.Add("ass");
+                fakeBlacklist.Add("ass");
+                fakeBlacklist.Add("zebra");
+                var stringContent = new StringContent(fakeBlacklist);
+
+                // Act.
+                var result = stringContent.PhrasesThatExist(content);
+
+                // Assert.
+                Assert.NotNull(result);
+                Assert.NotEmpty(result);
+                Assert.NotEqual(fakeBlacklist.Count, result.Count);
+            }
         }
     }
 

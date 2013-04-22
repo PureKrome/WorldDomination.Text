@@ -37,7 +37,7 @@ namespace WorldDomination.Text
             var results = new List<FoundPhrase>();
 
             // Find any bad words that exist in this cleaned content.
-            foreach (var phrase in (phraseList != null ? phraseList.AsParallel() : PhraseList.AsParallel()))
+            foreach (var phrase in (phraseList ?? PhraseList).Distinct())
             {
                 int index = 0;
                 while ((index = (content.IndexOf(phrase, index, StringComparison.InvariantCultureIgnoreCase))) >= 0)
