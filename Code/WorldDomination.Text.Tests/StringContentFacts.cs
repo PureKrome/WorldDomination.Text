@@ -233,7 +233,7 @@ namespace WorldDomination.Text.Tests
                 IList<string> fakeBlacklist = new List<string>();
                 fakeBlacklist.Add("aardvark");
                 fakeBlacklist.Add("ass");
-                fakeBlacklist.Add("ass");
+                fakeBlacklist.Add("Ass");
                 fakeBlacklist.Add("zebra");
                 var stringContent = new StringContent(fakeBlacklist);
 
