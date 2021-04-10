@@ -1,1 +1,1 @@
-![Damn it](http://blogs.westword.com/showandtell/Droids1.jpg)
+# Archived - 10/04/2021
